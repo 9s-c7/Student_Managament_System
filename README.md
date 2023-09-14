@@ -25,9 +25,11 @@ jQuery UI is an extension of jQuery that provides additional user interface inte
 
 
 
-Uploading Website.mov…
 
 
+
+
+https://github.com/9s-c7/Student_Managament_System/assets/123151672/f0df3c6a-5ecc-4580-9c48-3d2ffa387597
 
 https://github.com/9s-c7/Student_Managament_System/assets/123151672/a7bba1f0-e9c7-442d-b04b-b8e63b227f36
 
