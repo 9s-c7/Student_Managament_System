@@ -1,0 +1,468 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Dashboard {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+  /* Define CSS classes for teacher names based on subjects */
+  .teacher-math {
+    background-color: #FFD1DC; /* Pastel red */
+    color: #FF4081; /* Text color */
+    font-weight: bold; /* Bold text */
+  }
+
+  .teacher-science {
+    background-color: #AEDBF0; /* Pastel blue */
+    color: #007BFF; /* Text color */
+    font-weight: bold; /* Bold text */
+  }
+
+  .teacher-english {
+    background-color: #C4FCE3; /* Pastel green */
+    color: #28A745; /* Text color */
+    font-weight: bold; /* Bold text */
+  }
+
+  /* Style for event box */
+  .event-box {
+    padding: 10px;
+    border: 1px solid #ccc;
+    max-width: 300px; /* Adjust the maximum width as needed */
+    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Additional responsive styles */
+  @media (max-width: 768px) {
+    .event-box {
+      max-width: 100%; /* Full width on smaller screens */
+    }
+  }
+</style>
+<!-- Include FullCalendar stylesheet -->
+<link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet' />
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- Header -->
+    <div class="header bg-primary pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+              <h6 class="h2 text-white d-inline-block mb-0">Home Page</h6>
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="#">Home Page</a></li>
+                  {% comment %} <li class="breadcrumb-item active" aria-current="page">Default</li> {% endcomment %}
+                </ol>
+              </nav>
+            </div>
+            <div class="col-lg-6 col-5 text-right">
+              <a href="#" class="btn btn-sm btn-neutral">New</a>
+              <a href="#" class="btn btn-sm btn-neutral">Filters</a>
+            </div>
+          </div>
+          <!-- Card stats -->
+          <div class="row">
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Assignments Due</h5>
+                      <span class="h2 font-weight-bold mb-0">3</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                        <i class="ni ni-active-40"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-sm">
+                    {% comment %} <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span> {% endcomment %}
+                    <span class="text-nowrap">Sumbit in Time!</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Last Grade</h5>
+                      <span class="h2 font-weight-bold mb-0">5</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                        <i class="ni ni-chart-pie-35"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-sm">
+                    <span class="text-nowrap">Good Job!</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Attendance for Today</h5>
+                      <span class="h3 font-weight-bold mb-0"> Absent! Attend Classes!</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                        <i class="ni ni-money-coins"></i>
+                      </div>
+                    </div>
+                  </div>
+                  {% comment %} <p class="mt-3 mb-0 text-sm">
+                    <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                    <span class="text-nowrap">Since last month</span>
+                  </p> {% endcomment %}
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h6 class="card-title text-uppercase text-muted mb-0">Quote</h6>
+                      <span class="h3 font-weight-bold mb-0">You have got this! Keep Going!</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
+                        <i class="ni ni-chart-bar-32"></i>
+                      </div>
+                    </div>
+                  </div>
+                  {% comment %} <p class="mt-3 mb-0 text-sm">
+                    <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                    <span class="text-nowrap">Since last month</span>
+                  </p> {% endcomment %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% comment %} <!-- Page content -->
+<div class="container-fluid mt--6">
+  <div class="row">
+    <div class="col-xl-8">
+  <!-- Add a container for the FullCalendar -->
+  <div id="calendar-container">
+    <!-- The FullCalendar will be rendered here -->
+  </div>
+</div>
+
+    <div class="col-xl-4">
+      <div class="card">
+        <div class="card-header bg-transparent">
+          <div class="row align-items-center">
+            <div class="col">
+              <h6 class="text-uppercase text-muted ls-1 mb-1">Attendance</h6>
+              <h5 class="h3 mb-0">Attendance Summary</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- Add a container for the pie chart -->
+          <canvas id="attendance-chart" class="chart-canvas"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Include FullCalendar JavaScript -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js'></script>
+
+  <!-- Include Chart.js JavaScript -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js'></script>
+
+  <!-- Custom JavaScript for Calendar and Chart -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var calendarEl = document.getElementById('calendar-container');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: [
+          {
+            title: 'Event 1',
+            start: '2023-09-10',
+          },
+          {
+            title: 'Event 2',
+            start: '2023-09-15',
+          },
+          // Add more events here...
+        ],
+      });
+      calendar.render();
+    });
+    
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var pieData = {
+        labels: ['Absent', 'Holiday', 'Present'],
+        datasets: [{
+          data: [10, 30, 60], // Replace with your data
+          backgroundColor: ['red', 'blue', 'green'], // Customize colors
+        }]
+      };
+
+      var pieOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+      };
+
+      var pieChart = new Chart(document.getElementById('attendance-chart'), {
+        type: 'pie',
+        data: pieData,
+        options: pieOptions
+      });
+    });
+  </script>
+
+</div>
+
+{% endblock content %} {% endcomment %}
+
+
+<!-- Page content -->
+<div class="container-fluid mt--6" >
+  <div class="row">
+    <div class="col-xl-8" >
+      <div class="card bg-white" style="padding: 20px; background-color: #f5f5f5; display: flex; justify-content: center; align-items: center;">
+        <div class="card-header bg-transparent">
+          <div class="row align-items-center">
+            <div class="col">
+              <h5 class="h3 mb-0">Calendar Summary</h5>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div >
+            <!-- Add a container for the FullCalendar -->
+            <div id="calendar">
+              <!-- The FullCalendar will be rendered here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="card">
+        <div class="card-header bg-transparent">
+          <div class="row align-items-center">
+            <div class="col">
+              <h6 class="text-uppercase text-muted ls-1 mb-1">Attendance</h6>
+              <h5 class="h3 mb-0">Attendance Summary</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- Add a container for the pie chart -->
+          <canvas id="attendance-chart" class="chart-canvas"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  {% include "includes/footer.html" %}
+
+</div>
+{% endblock content %}
+{% block javascripts %}
+
+<!-- Include FullCalendar JavaScript -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js'></script>
+
+<!-- Include Chart.js JavaScript -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js'></script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js'></script>
+<!-- Custom JavaScript for Calendar and Chart -->
+
+
+    <script type='importmap'>
+      {
+        "imports": {
+          "@fullcalendar/core": "https://cdn.skypack.dev/@fullcalendar/core@6.1.8",
+          "@fullcalendar/daygrid": "https://cdn.skypack.dev/@fullcalendar/daygrid@6.1.8",
+          "@fullcalendar/interaction": "https://cdn.skypack.dev/@fullcalendar/interaction@6.1.8"
+        }
+      }
+    </script>
+    
+    <script type='module'>
+      import { Calendar } from '@fullcalendar/core'
+      import dayGridPlugin from '@fullcalendar/daygrid'
+      import interactionPlugin from '@fullcalendar/interaction'
+        
+       var titleToColor = {
+        'Math': 'red',
+        'Science': 'blue',
+        'English': 'green',
+        // Add more event titles and colors as needed
+    };
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar')
+        var calendar = new Calendar(calendarEl, {
+          plugins: [dayGridPlugin, interactionPlugin],
+          selectable: true,
+          droppable: true,
+          editable: true,
+          events: [
+        {
+          title: 'Math - Mr. Smith', // Subject and Teacher separated by "-"
+          start: '2023-09-10T10:00:00',
+        },
+        {
+          title: 'Science - Mrs. Johnson',
+          start: '2023-09-15T14:30:00',
+        },
+        // Add more default events as needed
+      ],
+      eventContent: function(info) {
+        var titleParts = info.event.title.split(' - ');
+        var subject = titleParts[0];
+        var teacher = titleParts[1];
+        var teacherClass = 'teacher-' + subject.toLowerCase();
+        var eventTime = info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return {
+          html: `<div class="event-box ${teacherClass}">
+                    <span class="event-subject">${subject}</span><br>
+                    <span class="event-teacher">By: ${teacher}</span><br>
+                    <span class="event-time">Time: ${eventTime}</span>
+                 </div>`
+        };
+      },
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,dayGridWeek'
+        }
+      })
+        calendar.render()
+  });
+
+  // Pie Chart Code
+  document.addEventListener('DOMContentLoaded', function () {
+    var pieData = {
+      labels: ['Absent', 'Holiday', 'Present'],
+      datasets: [{
+        data: [30, 50, 20], // Replace with your data
+        backgroundColor: ['red', 'blue', 'green'], // Customize colors
+      }]
+    };
+
+    var pieOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+    };
+
+    var pieChart = new Chart(document.getElementById('attendance-chart'), {
+      type: 'pie',
+      data: pieData,
+      options: pieOptions
+    });
+  });
+</script>
+
+
+
+{% endblock javascripts %}
+
+
+
+    {% comment %} <!-- Page content -->
+    <div class="container-fluid mt--6">
+      <div class="row">
+        <div class="col-xl-8">
+          <div class="card bg-default">
+            <div class="card-header bg-transparent">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h6 class="text-light text-uppercase ls-1 mb-1">Overview</h6>
+                  <h5 class="h3 text-white mb-0">Sales value</h5>
+                </div>
+                <div class="col">
+                  <ul class="nav nav-pills justify-content-end">
+                    <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#chart-sales-dark" data-update='{"data":{"datasets":[{"data":[0, 20, 10, 30, 15, 40, 20, 60, 60]}]}}' data-prefix="$" data-suffix="k">
+                      <a href="#" class="nav-link py-2 px-3 active" data-toggle="tab">
+                        <span class="d-none d-md-block">Month</span>
+                        <span class="d-md-none">M</span>
+                      </a>
+                    </li>
+                    <li class="nav-item" data-toggle="chart" data-target="#chart-sales-dark" data-update='{"data":{"datasets":[{"data":[0, 20, 5, 25, 10, 30, 15, 40, 40]}]}}' data-prefix="$" data-suffix="k">
+                      <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
+                        <span class="d-none d-md-block">Week</span>
+                        <span class="d-md-none">W</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Chart -->
+              <div class="chart">
+                <!-- Chart wrapper -->
+                <canvas id="chart-sales-dark" class="chart-canvas"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4">
+          <div class="card">
+            <div class="card-header bg-transparent">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
+                  <h5 class="h3 mb-0">Total orders</h5>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Chart -->
+              <div class="chart">
+                <canvas id="chart-bars" class="chart-canvas"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+      {% include "includes/footer.html" %}
+
+    </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+  <script src="/static/assets/vendor/chart.js/dist/Chart.min.js"></script>
+  <script src="/static/assets/vendor/chart.js/dist/Chart.extension.js"></script>
+
+{% endblock javascripts %} {% endcomment %}

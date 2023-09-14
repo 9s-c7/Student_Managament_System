@@ -1,0 +1,303 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Calendar {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<script src="
+https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
+"></script>
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/main.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/main.min.js"></script>
+<style>
+  /* Define CSS classes for teacher names based on subjects */
+  .teacher-math {
+    background-color: #FFD1DC; /* Pastel red */
+    color: #FF4081; /* Text color */
+    font-weight: bold; /* Bold text */
+  }
+
+  .teacher-science {
+    background-color: #AEDBF0; /* Pastel blue */
+    color: #007BFF; /* Text color */
+    font-weight: bold; /* Bold text */
+  }
+
+  .teacher-english {
+    background-color: #C4FCE3; /* Pastel green */
+    color: #28A745; /* Text color */
+    font-weight: bold; /* Bold text */
+  }
+
+  /* Style for event box */
+  .event-box {
+    padding: 10px;
+    border: 1px solid #ccc;
+    max-width: 300px; /* Adjust the maximum width as needed */
+    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Additional responsive styles */
+  @media (max-width: 768px) {
+    .event-box {
+      max-width: 100%; /* Full width on smaller screens */
+    }
+  }
+</style>
+{% endblock stylesheets %}
+
+
+{% block content %}
+
+<div class="header bg-primary pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-6 col-7">
+          <h6 class="h2 text-white d-inline-block mb-0">Calendar</h6>
+          
+        </div>
+        <div class="col-lg-6 col-5 text-right">
+          <a href="#" class="btn btn-sm btn-neutral">New</a>
+          <a href="#" class="btn btn-sm btn-neutral">Filters</a>
+        </div>
+      </div>
+          <!-- Card stats -->
+          <div class="row">
+            <div class="col-xl-6 col-lg-12">
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h4 class="card-title text-uppercase text-muted mb-0">Upcoming Events</h5>
+                      <span class="h2 font-weight-bold mb-0">3</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                        <i class="fas fa-chart-bar"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-muted text-sm">
+                    <span class="text-nowrap">for August 2023 </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-6 col-lg-12">
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h4 class="card-title text-uppercase text-muted mb-0">Past Events</h5>
+                      <span class="h2 font-weight-bold mb-0">17</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                        <i class="fas fa-chart-pie"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-muted text-sm">
+                    <span class="text-nowrap">for last month</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="container-fluid mt--6">
+      <div class="card bg-white">
+        <div class="mr-5 mt-5 mb-5 ml-5">
+          <form id="event-form">
+            <form id="event-form">
+              <label for="event-title">Subject:</label>
+              <input type="text" id="event-title" required>
+      
+              <label for="event-teacher">Teacher:</label>
+              <input type="text" id="event-teacher" required>
+      
+              <label for="event-date">Date:</label>
+              <input type="date" id="event-date" required>
+      
+              <label for="event-time">Time:</label>
+              <input type="time" id="event-time" required>
+      
+              <button type="button" class="btn btn-primary" id="add-event-button">Book Lecture</button>
+            </form>
+                      
+                      
+          <!-- Add a container for the FullCalendar -->
+          <div id="calendar"></div>
+        </div>
+      </div>
+      {% include "includes/footer.html" %}
+    </div>
+    {% endblock content %}
+    
+    <!-- Specific JS goes HERE -->
+    {% block javascripts %}
+
+    <script type='importmap'>
+      {
+        "imports": {
+          "@fullcalendar/core": "https://cdn.skypack.dev/@fullcalendar/core@6.1.8",
+          "@fullcalendar/daygrid": "https://cdn.skypack.dev/@fullcalendar/daygrid@6.1.8",
+          "@fullcalendar/interaction": "https://cdn.skypack.dev/@fullcalendar/interaction@6.1.8"
+        }
+      }
+    </script>
+    
+    <script type='module'>
+      import { Calendar } from '@fullcalendar/core'
+      import dayGridPlugin from '@fullcalendar/daygrid'
+      import interactionPlugin from '@fullcalendar/interaction'
+        
+       var titleToColor = {
+        'Math': 'red',
+        'Science': 'blue',
+        'English': 'green',
+        // Add more event titles and colors as needed
+    };
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar')
+        var calendar = new Calendar(calendarEl, {
+          plugins: [dayGridPlugin, interactionPlugin],
+          selectable: true,
+          droppable: true,
+          editable: true,
+          events: [
+        {
+          title: 'Math - Mr. Smith', // Subject and Teacher separated by "-"
+          start: '2023-09-10T10:00:00',
+        },
+        {
+          title: 'Science - Mrs. Johnson',
+          start: '2023-09-15T14:30:00',
+        },
+        // Add more default events as needed
+      ],
+      eventContent: function(info) {
+        var titleParts = info.event.title.split(' - ');
+        var subject = titleParts[0];
+        var teacher = titleParts[1];
+        var teacherClass = 'teacher-' + subject.toLowerCase();
+        var eventTime = info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return {
+          html: `<div class="event-box ${teacherClass}">
+                    <span class="event-subject">${subject}</span><br>
+                    <span class="event-teacher">By: ${teacher}</span><br>
+                    <span class="event-time">Time: ${eventTime}</span>
+                 </div>`
+        };
+      },
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,dayGridWeek'
+        }
+      })
+        calendar.render()
+
+        document.getElementById('add-event-button').addEventListener('click', function() {
+          var title = document.getElementById('event-title').value;
+          var teacher = document.getElementById('event-teacher').value;
+          var date = document.getElementById('event-date').value;
+          var time = document.getElementById('event-time').value;
+  
+          if (title && teacher && date && time) {
+            // Create an event object
+            var eventTitle = `${title} - ${teacher}`;
+            var datetime = date + 'T' + time;
+  
+            var event = {
+              title: eventTitle,
+              start: datetime
+            };
+  
+            // Add the event to the calendar's 'events' array
+            calendar.addEvent(event);
+  
+            // Clear the form fields
+            document.getElementById('event-title').value = '';
+            document.getElementById('event-teacher').value = '';
+            document.getElementById('event-date').value = '';
+            document.getElementById('event-time').value = '';
+          }
+    });
+  })
+    </script>
+
+    {% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/main.min.js"></script>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        selectable: true,
+        droppable: true,
+        editable: true,
+        events: [],
+
+        eventDrop: function(info) {
+          console.log(info.event.title + ' was dropped on ' + info.event.start.toISOString());
+        },
+      });
+    
+      calendar.render();
+
+      var titleToColor = {
+        'Math': 'red',
+        'Science': 'blue',
+        'English': 'green',
+        // Add more event titles and colors as needed
+    };
+    
+      // Handle button click to add events
+      document.getElementById('add-event-button').addEventListener('click', function() {
+        var title = document.getElementById('event-title').value;
+        var date = document.getElementById('event-date').value;
+        var time = document.getElementById('event-time').value;
+              
+        if (title && date && time) {
+          // Create an event object
+          var datetime = date + 'T' + time;
+
+          var event = {
+            title: title,
+            start: datetime,
+            backgroundColor: titleToColor[title] || 'gray',
+            editable: true,
+          };
+    
+          // Add the event to the calendar's 'events' array
+          calendar.addEvent(event);
+          // Render the event on the calendar
+          calendar.renderEvent(event);
+
+          var eventsInStorage = JSON.parse(localStorage.getItem('events')) || [];
+          eventsInStorage.push(event);
+          localStorage.setItem('events', JSON.stringify(eventsInStorage));
+    
+          // Clear the form fields
+          document.getElementById('event-title').value = '';
+          document.getElementById('event-teacher').value = '';
+          document.getElementById('event-date').value = '';
+          document.getElementById('event-time').value = '';
+        }
+      });
+    });
+    </script> {% endcomment %}
+    {% endblock javascripts %}
